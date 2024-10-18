@@ -24,15 +24,14 @@ namespace Non_linear_Filters_Median
 
         private void btnChoose_Click(object sender, EventArgs e)
         {
-            // Create and configure OpenFileDialog
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.gif";
             openFileDialog.Title = "Select an Image";
 
-            // Show the dialog and get the result
+            // show chose image
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                picStart.Image = Image.FromFile(openFileDialog.FileName);
+                picBefore.Image = Image.FromFile(openFileDialog.FileName);
             }
         }
     }

@@ -28,36 +28,36 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.picStart = new System.Windows.Forms.PictureBox();
-            this.picEnd = new System.Windows.Forms.PictureBox();
+            this.picBefore = new System.Windows.Forms.PictureBox();
+            this.picAfter = new System.Windows.Forms.PictureBox();
             this.btnChoose = new System.Windows.Forms.Button();
             this.btnFilter = new System.Windows.Forms.Button();
             this.btnReset = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            ((System.ComponentModel.ISupportInitialize)(this.picStart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picEnd)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBefore)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picAfter)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
-            // picStart
+            // picBefore
             // 
-            this.picStart.BackColor = System.Drawing.SystemColors.Control;
-            this.picStart.Location = new System.Drawing.Point(18, 25);
-            this.picStart.Name = "picStart";
-            this.picStart.Size = new System.Drawing.Size(392, 358);
-            this.picStart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picStart.TabIndex = 0;
-            this.picStart.TabStop = false;
+            this.picBefore.BackColor = System.Drawing.SystemColors.Control;
+            this.picBefore.Location = new System.Drawing.Point(18, 25);
+            this.picBefore.Name = "picBefore";
+            this.picBefore.Size = new System.Drawing.Size(392, 358);
+            this.picBefore.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picBefore.TabIndex = 0;
+            this.picBefore.TabStop = false;
             // 
-            // picEnd
+            // picAfter
             // 
-            this.picEnd.Location = new System.Drawing.Point(17, 25);
-            this.picEnd.Name = "picEnd";
-            this.picEnd.Size = new System.Drawing.Size(392, 358);
-            this.picEnd.TabIndex = 1;
-            this.picEnd.TabStop = false;
+            this.picAfter.Location = new System.Drawing.Point(17, 25);
+            this.picAfter.Name = "picAfter";
+            this.picAfter.Size = new System.Drawing.Size(392, 358);
+            this.picAfter.TabIndex = 1;
+            this.picAfter.TabStop = false;
             // 
             // btnChoose
             // 
@@ -89,7 +89,7 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.picStart);
+            this.groupBox1.Controls.Add(this.picBefore);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(51, 46);
             this.groupBox1.Name = "groupBox1";
@@ -100,7 +100,7 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.picEnd);
+            this.groupBox2.Controls.Add(this.picAfter);
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.Location = new System.Drawing.Point(687, 46);
             this.groupBox2.Name = "groupBox2";
@@ -113,7 +113,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1164, 510);
+            this.ClientSize = new System.Drawing.Size(1164, 496);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnFilter);
@@ -122,8 +122,8 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.picStart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picEnd)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBefore)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picAfter)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -132,8 +132,8 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox picStart;
-        private System.Windows.Forms.PictureBox picEnd;
+        private System.Windows.Forms.PictureBox picBefore;
+        private System.Windows.Forms.PictureBox picAfter;
         private System.Windows.Forms.Button btnChoose;
         private System.Windows.Forms.Button btnFilter;
         private System.Windows.Forms.Button btnReset;
