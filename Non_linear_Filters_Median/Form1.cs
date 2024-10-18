@@ -34,5 +34,11 @@ namespace Non_linear_Filters_Median
                 picBefore.Image = Image.FromFile(openFileDialog.FileName);
             }
         }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            picAfter.Image = null;
+            picBefore.Image = null;
+        }
     }
 }
