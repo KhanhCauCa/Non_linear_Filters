@@ -56,6 +56,7 @@
             this.picAfter.Location = new System.Drawing.Point(17, 25);
             this.picAfter.Name = "picAfter";
             this.picAfter.Size = new System.Drawing.Size(392, 358);
+            this.picAfter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picAfter.TabIndex = 1;
             this.picAfter.TabStop = false;
             // 
@@ -77,6 +78,7 @@
             this.btnFilter.TabIndex = 2;
             this.btnFilter.Text = "Median filter";
             this.btnFilter.UseVisualStyleBackColor = true;
+            this.btnFilter.Click += new System.EventHandler(this.btnFilter_Click);
             // 
             // btnReset
             // 
@@ -121,6 +123,7 @@
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.btnChoose);
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picBefore)).EndInit();
