@@ -30,7 +30,6 @@ namespace Non_linear_Filters_Median
             openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.gif";
             openFileDialog.Title = "Select an Image";
 
-            // show chose image
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 picBefore.Image = Image.FromFile(openFileDialog.FileName);
@@ -116,6 +115,87 @@ namespace Non_linear_Filters_Median
 
             return resultBitmap;
         }
-    }
+
+        private void AdaptiveMedianFilter_btn_Click(object sender, EventArgs e)
+        {
+         if (picBefore.Image == null)
+         {
+          MessageBox.Show("Please choose an image first.");
+          return;
+         }
+
+         Bitmap sourceBitmap = new Bitmap(picBefore.Image);
+         Bitmap filteredBitmap = ApplyAdaptiveMedianFilter(sourceBitmap);
+
+         picAfter.Image = filteredBitmap;
+        }
+        private Bitmap ApplyAdaptiveMedianFilter(Bitmap image)
+        {
+          Bitmap result = new Bitmap(image.Width, image.Height);
+          int maxWindowSize = 7;
+
+          for (int y = 0; y < image.Height; y++)
+          {
+           for (int x = 0; x < image.Width; x++)
+           {
+            result.SetPixel(x, y, GetAdaptiveMedianPixel(image, x, y, maxWindowSize));
+           }
+          }
+
+          return result;
+        }
+
+        private Color GetAdaptiveMedianPixel(Bitmap image, int x, int y, int maxWindowSize)
+        {
+          int windowSize = 3;
+
+          while (windowSize <= maxWindowSize)
+          {
+           int halfWindow = windowSize / 2;
+           int[] pixelValues = new int[windowSize * windowSize];
+           int index = 0;
+
+           
+           for (int j = -halfWindow; j <= halfWindow; j++)
+           {
+            for (int i = -halfWindow; i <= halfWindow; i++)
+            {
+             int px = Math.Max(0, Math.Min(image.Width - 1, x + i));
+             int py = Math.Max(0, Math.Min(image.Height - 1, y + j));
+             Color pixelColor = image.GetPixel(px, py);
+             pixelValues[index++] = pixelColor.R;
+            }
+           }
+
+           
+           Array.Sort(pixelValues);
+           int minValue = pixelValues[0];
+           int maxValue = pixelValues[pixelValues.Length - 1];
+           int medianValue = pixelValues[pixelValues.Length / 2];
+           int currentPixelValue = image.GetPixel(x, y).R;
+
+           
+           if (medianValue > minValue && medianValue < maxValue)
+           {
+            if (currentPixelValue > minValue && currentPixelValue < maxValue)
+            {
+             return Color.FromArgb(medianValue, medianValue, medianValue);
+            }
+            else
+            {
+             return Color.FromArgb(medianValue, medianValue, medianValue);
+            }
+           }
+           else
+           {
+            windowSize += 2;
+           }
+          }
+
+          return image.GetPixel(x, y);
+         }
+
+  
+ }
 }
 
