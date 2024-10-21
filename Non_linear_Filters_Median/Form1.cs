@@ -1,201 +1,199 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+﻿using System.Drawing;
+using System;
 using System.Drawing.Imaging;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using OpenCvSharp;
+using OpenCvSharp.Extensions;
 
 namespace Non_linear_Filters_Median
 {
-    public partial class Form1 : Form
+ public partial class Form1 : Form
+ {
+  public Form1()
+  {
+   InitializeComponent();
+  }
+
+  private void Form1_Load(object sender, EventArgs e)
+  {
+   comboBoxFilter.Items.Clear();
+   comboBoxFilter.Items.Add("Choose Filter");
+   comboBoxFilter.Items.Add("Median");
+   comboBoxFilter.Items.Add("Bilateral");
+   comboBoxFilter.Items.Add("Gaussian");
+   comboBoxFilter.Items.Add("Nonlinear Weighted Mean");
+   comboBoxFilter.Items.Add("Anisotropic Diffusion");
+   comboBoxFilter.Items.Add("None");
+   comboBoxFilter.SelectedIndex = 0;
+
+   trackBarBilateral.Visible = false;
+   lblTrackBarValue.Visible = false;
+   btnFilter.Visible = false;
+
+   trackBarBilateral.Minimum = 1;
+   trackBarBilateral.Maximum = 100;
+   trackBarBilateral.Value = 50;
+  }
+
+  private void comboBoxFilter_SelectedIndexChanged(object sender, EventArgs e)
+  {
+   string selectedFilter = comboBoxFilter.SelectedItem.ToString();
+
+   if (selectedFilter == "Bilateral")
+   {
+    trackBarBilateral.Visible = true;
+    lblTrackBarValue.Visible = true;
+    btnFilter.Visible = false;
+    ApplySelectedFilter();
+   }
+   else
+   {
+    trackBarBilateral.Visible = false;
+    lblTrackBarValue.Visible = false;
+    btnFilter.Visible = true;
+   }
+  }
+
+  private void trackBarBilateral_Scroll(object sender, EventArgs e)
+  {
+   lblTrackBarValue.Text = "Mịn: " + trackBarBilateral.Value.ToString();
+   ApplySelectedFilter();
+  }
+
+  private void btnFilter_Click(object sender, EventArgs e)
+  {
+   ApplySelectedFilter();
+  }
+
+  private void ApplySelectedFilter()
+  {
+   if (comboBoxFilter.SelectedIndex == 0)
+   {
+    MessageBox.Show("Please select a valid filter.");
+    return;
+   }
+   if (picBefore.Image == null)
+   {
+    MessageBox.Show("Please choose an image first.");
+    return;
+   }
+   Bitmap sourceBitmap = new Bitmap(picBefore.Image);
+
+   Mat sourceMat = BitmapConverter.ToMat(sourceBitmap);
+
+   if (sourceMat.Type() != MatType.CV_8UC3 && sourceMat.Type() != MatType.CV_8UC1)
+   {
+    Cv2.CvtColor(sourceMat, sourceMat, ColorConversionCodes.BGRA2BGR);
+   }
+
+   Mat filteredMat = new Mat();
+   string selectedFilter = comboBoxFilter.SelectedItem.ToString();
+
+   switch (selectedFilter)
+   {
+    case "Median":
+     Cv2.MedianBlur(sourceMat, filteredMat, 5);
+     break;
+
+    case "Bilateral":
+     int sigmaSpace = trackBarBilateral.Value;
+     int sigmaColor = 50;
+     Cv2.BilateralFilter(sourceMat, filteredMat, 15, sigmaColor, sigmaSpace);
+     break;
+
+    case "Gaussian":
+     Cv2.GaussianBlur(sourceMat, filteredMat, new OpenCvSharp.Size(5, 5), 0);
+     break;
+
+    case "Nonlinear Weighted Mean":
+     filteredMat = ApplyNonlinearWeightedMeanFilter(sourceMat);
+     break;
+
+    case "Anisotropic Diffusion":
+     //filteredMat = ApplyAnisotropicDiffusion(sourceMat, 10, 0.25); // 10 iterations, lambda = 0.25
+     break;
+
+    case "None":
+     filteredMat = sourceMat.Clone();
+     break;
+   }
+
+   Bitmap filteredBitmap = BitmapConverter.ToBitmap(filteredMat);
+   picAfter.Image = filteredBitmap;
+  }
+
+  // Bộ lọc trung bình có trọng số phi tuyến (Nonlinear Weighted Mean Filter)
+  public Mat ApplyNonlinearWeightedMeanFilter(Mat sourceMat)
+  {
+   // Tạo bản sao của ảnh đầu vào (Mat)
+   Mat resultMat = new Mat(sourceMat.Size(), sourceMat.Type());
+
+   // Duyệt qua từng pixel của ảnh, bỏ qua viền
+   for (int y = 1; y < sourceMat.Rows - 1; y++)
+   {
+    for (int x = 1; x < sourceMat.Cols - 1; x++)
     {
-        public Form1()
-        {
-            InitializeComponent();
-        }
+     double sumB = 0, sumG = 0, sumR = 0;
+     double weightSum = 0;
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
+     Vec3b centerPixel = sourceMat.At<Vec3b>(y, x); // Pixel tại vị trí (x, y)
 
-        }
+     // Áp dụng bộ lọc 3x3
+     for (int i = -1; i <= 1; i++)
+     {
+      for (int j = -1; j <= 1; j++)
+      {
+       Vec3b neighborPixel = sourceMat.At<Vec3b>(y + i, x + j);
 
-        private void btnChoose_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.gif";
-            openFileDialog.Title = "Select an Image";
+       // Tính trọng số phi tuyến dựa trên sự khác biệt của kênh màu đỏ (R)
+       double weight = 1.0 / (1.0 + Math.Abs(neighborPixel.Item2 - centerPixel.Item2));
 
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                picBefore.Image = Image.FromFile(openFileDialog.FileName);
-            }
-        }
+       // Cộng dồn giá trị của các kênh (B, G, R) với trọng số
+       sumB += neighborPixel.Item0 * weight; // Blue
+       sumG += neighborPixel.Item1 * weight; // Green
+       sumR += neighborPixel.Item2 * weight; // Red
 
-        private void btnReset_Click(object sender, EventArgs e)
-        {
-            picAfter.Image = null;
-            picBefore.Image = null;
-        }
+       // Tổng trọng số
+       weightSum += weight;
+      }
+     }
 
-        private void btnFilter_Click(object sender, EventArgs e)
-        {
-            if (picBefore.Image == null)
-            {
-                MessageBox.Show("Please choose an image first.");
-                return;
-            }
+     // Tính giá trị trung bình có trọng số cho mỗi kênh màu (B, G, R)
+     byte avgB = (byte)Math.Min(255, Math.Max(0, sumB / weightSum));
+     byte avgG = (byte)Math.Min(255, Math.Max(0, sumG / weightSum));
+     byte avgR = (byte)Math.Min(255, Math.Max(0, sumR / weightSum));
 
-            Bitmap sourceBitmap = new Bitmap(picBefore.Image);
-            Bitmap filteredBitmap = ApplyMedianFilter(sourceBitmap);
+     // Gán giá trị mới vào ảnh kết quả
+     resultMat.Set(y, x, new Vec3b(avgB, avgG, avgR));
+    }
+   }
 
-            picAfter.Image = filteredBitmap;
-        }
+   return resultMat;
+  }
 
-        private Bitmap ApplyMedianFilter(Bitmap sourceBitmap)
-        {
-            int width = sourceBitmap.Width;
-            int height = sourceBitmap.Height;
-            BitmapData sourceData = sourceBitmap.LockBits(new Rectangle(0, 0, width, height),
-                                                          ImageLockMode.ReadOnly,
-                                                          PixelFormat.Format32bppArgb);
 
-            int byteCount = sourceData.Stride * sourceData.Height;
-            byte[] pixelBuffer = new byte[byteCount];
-            byte[] resultBuffer = new byte[byteCount];
 
-            Marshal.Copy(sourceData.Scan0, pixelBuffer, 0, byteCount);
-            sourceBitmap.UnlockBits(sourceData);
+  // Bộ lọc khuếch tán dị hướng (Anisotropic Diffusion)
 
-            int filterOffset = 1;
-            int calcOffset = 0;
-            int byteOffset = 0;
 
-            List<int> neighbourPixels = new List<int>();
-            byte[] middlePixel;
+  private void btnChoose_Click(object sender, EventArgs e)
+  {
+   using (OpenFileDialog openFileDialog = new OpenFileDialog())
+   {
+    openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;";
+    if (openFileDialog.ShowDialog() == DialogResult.OK)
+    {
+     picBefore.Image = Image.FromFile(openFileDialog.FileName);
+     picAfter.Image = null;
+    }
+   }
+  }
 
-            for (int offsetY = filterOffset; offsetY < height - filterOffset; offsetY++)
-            {
-                for (int offsetX = filterOffset; offsetX < width - filterOffset; offsetX++)
-                {
-                    byteOffset = offsetY * sourceData.Stride + offsetX * 4;
-
-                    neighbourPixels.Clear();
-
-                    for (int filterY = -filterOffset; filterY <= filterOffset; filterY++)
-                    {
-                        for (int filterX = -filterOffset; filterX <= filterOffset; filterX++)
-                        {
-                            calcOffset = byteOffset + (filterX * 4) + (filterY * sourceData.Stride);
-                            neighbourPixels.Add(BitConverter.ToInt32(pixelBuffer, calcOffset));
-                        }
-                    }
-
-                    neighbourPixels.Sort();
-                    middlePixel = BitConverter.GetBytes(neighbourPixels[filterOffset * 4]);
-
-                    resultBuffer[byteOffset] = middlePixel[0];
-                    resultBuffer[byteOffset + 1] = middlePixel[1];
-                    resultBuffer[byteOffset + 2] = middlePixel[2];
-                    resultBuffer[byteOffset + 3] = middlePixel[3];
-                }
-            }
-
-            Bitmap resultBitmap = new Bitmap(width, height);
-            BitmapData resultData = resultBitmap.LockBits(new Rectangle(0, 0, width, height),
-                                                          ImageLockMode.WriteOnly,
-                                                          PixelFormat.Format32bppArgb);
-
-            Marshal.Copy(resultBuffer, 0, resultData.Scan0, byteCount);
-            resultBitmap.UnlockBits(resultData);
-
-            return resultBitmap;
-        }
-
-        private void AdaptiveMedianFilter_btn_Click(object sender, EventArgs e)
-        {
-         if (picBefore.Image == null)
-         {
-          MessageBox.Show("Please choose an image first.");
-          return;
-         }
-
-         Bitmap sourceBitmap = new Bitmap(picBefore.Image);
-         Bitmap filteredBitmap = ApplyAdaptiveMedianFilter(sourceBitmap);
-
-         picAfter.Image = filteredBitmap;
-        }
-        private Bitmap ApplyAdaptiveMedianFilter(Bitmap image)
-        {
-          Bitmap result = new Bitmap(image.Width, image.Height);
-          int maxWindowSize = 7;
-
-          for (int y = 0; y < image.Height; y++)
-          {
-           for (int x = 0; x < image.Width; x++)
-           {
-            result.SetPixel(x, y, GetAdaptiveMedianPixel(image, x, y, maxWindowSize));
-           }
-          }
-
-          return result;
-        }
-
-        private Color GetAdaptiveMedianPixel(Bitmap image, int x, int y, int maxWindowSize)
-        {
-          int windowSize = 3;
-
-          while (windowSize <= maxWindowSize)
-          {
-           int halfWindow = windowSize / 2;
-           int[] pixelValues = new int[windowSize * windowSize];
-           int index = 0;
-
-           
-           for (int j = -halfWindow; j <= halfWindow; j++)
-           {
-            for (int i = -halfWindow; i <= halfWindow; i++)
-            {
-             int px = Math.Max(0, Math.Min(image.Width - 1, x + i));
-             int py = Math.Max(0, Math.Min(image.Height - 1, y + j));
-             Color pixelColor = image.GetPixel(px, py);
-             pixelValues[index++] = pixelColor.R;
-            }
-           }
-
-           
-           Array.Sort(pixelValues);
-           int minValue = pixelValues[0];
-           int maxValue = pixelValues[pixelValues.Length - 1];
-           int medianValue = pixelValues[pixelValues.Length / 2];
-           int currentPixelValue = image.GetPixel(x, y).R;
-
-           
-           if (medianValue > minValue && medianValue < maxValue)
-           {
-            if (currentPixelValue > minValue && currentPixelValue < maxValue)
-            {
-             return Color.FromArgb(medianValue, medianValue, medianValue);
-            }
-            else
-            {
-             return Color.FromArgb(medianValue, medianValue, medianValue);
-            }
-           }
-           else
-           {
-            windowSize += 2;
-           }
-          }
-
-          return image.GetPixel(x, y);
-         }
-
-  
+  private void btnReset_Click(object sender, EventArgs e)
+  {
+   picBefore.Image = null;
+   picAfter.Image = null;
+  }
  }
 }
-

@@ -1,171 +1,178 @@
-﻿namespace Non_linear_Filters_Median
+﻿using static System.Net.Mime.MediaTypeNames;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Xml.Linq;
+
+namespace Non_linear_Filters_Median
 {
-    partial class Form1
-    {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+ partial class Form1
+ {
+  private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+  protected override void Dispose(bool disposing)
+  {
+   if (disposing && (components != null))
+   {
+    components.Dispose();
+   }
+   base.Dispose(disposing);
+  }
 
-        #region Windows Form Designer generated code
+  #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
-   this.picBefore = new System.Windows.Forms.PictureBox();
-   this.picAfter = new System.Windows.Forms.PictureBox();
-   this.btnChoose = new System.Windows.Forms.Button();
-   this.btnFilter = new System.Windows.Forms.Button();
-   this.btnReset = new System.Windows.Forms.Button();
-   this.groupBox1 = new System.Windows.Forms.GroupBox();
-   this.groupBox2 = new System.Windows.Forms.GroupBox();
-   this.btnAdaptiveMedianFilter = new System.Windows.Forms.Button();
-   ((System.ComponentModel.ISupportInitialize)(this.picBefore)).BeginInit();
-   ((System.ComponentModel.ISupportInitialize)(this.picAfter)).BeginInit();
-   this.groupBox1.SuspendLayout();
-   this.groupBox2.SuspendLayout();
-   this.SuspendLayout();
+  private void InitializeComponent()
+  {
+   picBefore = new PictureBox();
+   picAfter = new PictureBox();
+   btnChoose = new Button();
+   btnReset = new Button();
+   groupBox1 = new GroupBox();
+   groupBox2 = new GroupBox();
+   comboBoxFilter = new ComboBox();
+   trackBarBilateral = new TrackBar();
+   lblTrackBarValue = new Label();
+   btnFilter = new Button();
+   ((System.ComponentModel.ISupportInitialize)picBefore).BeginInit();
+   ((System.ComponentModel.ISupportInitialize)picAfter).BeginInit();
+   groupBox1.SuspendLayout();
+   groupBox2.SuspendLayout();
+   ((System.ComponentModel.ISupportInitialize)trackBarBilateral).BeginInit();
+   SuspendLayout();
    // 
    // picBefore
    // 
-   this.picBefore.BackColor = System.Drawing.SystemColors.Control;
-   this.picBefore.Location = new System.Drawing.Point(24, 31);
-   this.picBefore.Margin = new System.Windows.Forms.Padding(4);
-   this.picBefore.Name = "picBefore";
-   this.picBefore.Size = new System.Drawing.Size(523, 441);
-   this.picBefore.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-   this.picBefore.TabIndex = 0;
-   this.picBefore.TabStop = false;
+   picBefore.BackColor = SystemColors.Control;
+   picBefore.Location = new Point(21, 39);
+   picBefore.Margin = new Padding(4, 5, 4, 5);
+   picBefore.Name = "picBefore";
+   picBefore.Size = new Size(465, 551);
+   picBefore.SizeMode = PictureBoxSizeMode.StretchImage;
+   picBefore.TabIndex = 0;
+   picBefore.TabStop = false;
    // 
    // picAfter
    // 
-   this.picAfter.Location = new System.Drawing.Point(23, 31);
-   this.picAfter.Margin = new System.Windows.Forms.Padding(4);
-   this.picAfter.Name = "picAfter";
-   this.picAfter.Size = new System.Drawing.Size(523, 441);
-   this.picAfter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-   this.picAfter.TabIndex = 1;
-   this.picAfter.TabStop = false;
+   picAfter.Location = new Point(20, 39);
+   picAfter.Margin = new Padding(4, 5, 4, 5);
+   picAfter.Name = "picAfter";
+   picAfter.Size = new Size(465, 551);
+   picAfter.SizeMode = PictureBoxSizeMode.StretchImage;
+   picAfter.TabIndex = 1;
+   picAfter.TabStop = false;
    // 
    // btnChoose
    // 
-   this.btnChoose.Location = new System.Drawing.Point(700, 99);
-   this.btnChoose.Margin = new System.Windows.Forms.Padding(4);
-   this.btnChoose.Name = "btnChoose";
-   this.btnChoose.Size = new System.Drawing.Size(141, 47);
-   this.btnChoose.TabIndex = 2;
-   this.btnChoose.Text = "Choose Image";
-   this.btnChoose.UseVisualStyleBackColor = true;
-   this.btnChoose.Click += new System.EventHandler(this.btnChoose_Click);
-   // 
-   // btnFilter
-   // 
-   this.btnFilter.Location = new System.Drawing.Point(700, 172);
-   this.btnFilter.Margin = new System.Windows.Forms.Padding(4);
-   this.btnFilter.Name = "btnFilter";
-   this.btnFilter.Size = new System.Drawing.Size(141, 47);
-   this.btnFilter.TabIndex = 2;
-   this.btnFilter.Text = "Median filter";
-   this.btnFilter.UseVisualStyleBackColor = true;
-   this.btnFilter.Click += new System.EventHandler(this.btnFilter_Click);
+   btnChoose.Location = new Point(622, 124);
+   btnChoose.Margin = new Padding(4, 5, 4, 5);
+   btnChoose.Name = "btnChoose";
+   btnChoose.Size = new Size(125, 59);
+   btnChoose.TabIndex = 2;
+   btnChoose.Text = "Choose Image";
+   btnChoose.UseVisualStyleBackColor = true;
+   btnChoose.Click += btnChoose_Click;
    // 
    // btnReset
    // 
-   this.btnReset.Location = new System.Drawing.Point(700, 366);
-   this.btnReset.Margin = new System.Windows.Forms.Padding(4);
-   this.btnReset.Name = "btnReset";
-   this.btnReset.Size = new System.Drawing.Size(141, 47);
-   this.btnReset.TabIndex = 2;
-   this.btnReset.Text = "Reset";
-   this.btnReset.UseVisualStyleBackColor = true;
-   this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+   btnReset.Location = new Point(622, 489);
+   btnReset.Margin = new Padding(4, 5, 4, 5);
+   btnReset.Name = "btnReset";
+   btnReset.Size = new Size(125, 59);
+   btnReset.TabIndex = 2;
+   btnReset.Text = "Reset";
+   btnReset.UseVisualStyleBackColor = true;
+   btnReset.Click += btnReset_Click;
    // 
    // groupBox1
    // 
-   this.groupBox1.Controls.Add(this.picBefore);
-   this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-   this.groupBox1.Location = new System.Drawing.Point(68, 57);
-   this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
-   this.groupBox1.Name = "groupBox1";
-   this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
-   this.groupBox1.Size = new System.Drawing.Size(567, 491);
-   this.groupBox1.TabIndex = 4;
-   this.groupBox1.TabStop = false;
-   this.groupBox1.Text = "Before";
+   groupBox1.Controls.Add(picBefore);
+   groupBox1.Location = new Point(60, 71);
+   groupBox1.Name = "groupBox1";
+   groupBox1.Size = new Size(504, 614);
+   groupBox1.TabIndex = 4;
+   groupBox1.TabStop = false;
+   groupBox1.Text = "Before";
    // 
    // groupBox2
    // 
-   this.groupBox2.Controls.Add(this.picAfter);
-   this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-   this.groupBox2.Location = new System.Drawing.Point(916, 57);
-   this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
-   this.groupBox2.Name = "groupBox2";
-   this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
-   this.groupBox2.Size = new System.Drawing.Size(567, 491);
-   this.groupBox2.TabIndex = 5;
-   this.groupBox2.TabStop = false;
-   this.groupBox2.Text = "After";
+   groupBox2.Controls.Add(picAfter);
+   groupBox2.Location = new Point(814, 71);
+   groupBox2.Name = "groupBox2";
+   groupBox2.Size = new Size(504, 614);
+   groupBox2.TabIndex = 5;
+   groupBox2.TabStop = false;
+   groupBox2.Text = "After";
    // 
-   // btnAdaptiveMedianFilter
+   // comboBoxFilter
    // 
-   this.btnAdaptiveMedianFilter.Location = new System.Drawing.Point(700, 254);
-   this.btnAdaptiveMedianFilter.Name = "btnAdaptiveMedianFilter";
-   this.btnAdaptiveMedianFilter.Size = new System.Drawing.Size(141, 47);
-   this.btnAdaptiveMedianFilter.TabIndex = 6;
-   this.btnAdaptiveMedianFilter.Text = "Adaptive Median Filter";
-   this.btnAdaptiveMedianFilter.UseVisualStyleBackColor = true;
-   this.btnAdaptiveMedianFilter.Click += new System.EventHandler(this.AdaptiveMedianFilter_btn_Click);
+   comboBoxFilter.DropDownStyle = ComboBoxStyle.DropDownList;
+   comboBoxFilter.Location = new Point(622, 215);
+   comboBoxFilter.Name = "comboBoxFilter";
+   comboBoxFilter.Size = new Size(126, 28);
+   comboBoxFilter.TabIndex = 6;
+   comboBoxFilter.SelectedIndexChanged += comboBoxFilter_SelectedIndexChanged;
+   // 
+   // trackBarBilateral
+   // 
+   trackBarBilateral.Location = new Point(622, 304);
+   trackBarBilateral.Name = "trackBarBilateral";
+   trackBarBilateral.Size = new Size(125, 56);
+   trackBarBilateral.TabIndex = 7;
+   trackBarBilateral.Visible = false;
+   trackBarBilateral.Scroll += trackBarBilateral_Scroll;
+   // 
+   // lblTrackBarValue
+   // 
+   lblTrackBarValue.Location = new Point(622, 370);
+   lblTrackBarValue.Name = "lblTrackBarValue";
+   lblTrackBarValue.Size = new Size(125, 25);
+   lblTrackBarValue.TabIndex = 8;
+   lblTrackBarValue.Text = "Mịn: 50";
+   lblTrackBarValue.Visible = false;
+   // 
+   // btnFilter
+   // 
+   btnFilter.Location = new Point(623, 398);
+   btnFilter.Name = "btnFilter";
+   btnFilter.Size = new Size(125, 59);
+   btnFilter.TabIndex = 8;
+   btnFilter.Text = "Filter";
+   btnFilter.Visible = false;
+   btnFilter.Click += btnFilter_Click;
    // 
    // Form1
    // 
-   this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-   this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-   this.ClientSize = new System.Drawing.Size(1552, 610);
-   this.Controls.Add(this.btnAdaptiveMedianFilter);
-   this.Controls.Add(this.groupBox2);
-   this.Controls.Add(this.groupBox1);
-   this.Controls.Add(this.btnFilter);
-   this.Controls.Add(this.btnReset);
-   this.Controls.Add(this.btnChoose);
-   this.Margin = new System.Windows.Forms.Padding(4);
-   this.Name = "Form1";
-   this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-   this.Text = "Form1";
-   this.Load += new System.EventHandler(this.Form1_Load);
-   ((System.ComponentModel.ISupportInitialize)(this.picBefore)).EndInit();
-   ((System.ComponentModel.ISupportInitialize)(this.picAfter)).EndInit();
-   this.groupBox1.ResumeLayout(false);
-   this.groupBox2.ResumeLayout(false);
-   this.ResumeLayout(false);
-
-        }
-
-        #endregion
-
-        private System.Windows.Forms.PictureBox picBefore;
-        private System.Windows.Forms.PictureBox picAfter;
-        private System.Windows.Forms.Button btnChoose;
-        private System.Windows.Forms.Button btnFilter;
-        private System.Windows.Forms.Button btnReset;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox2;
-  private System.Windows.Forms.Button btnAdaptiveMedianFilter;
+   AutoScaleDimensions = new SizeF(8F, 20F);
+   AutoScaleMode = AutoScaleMode.Font;
+   ClientSize = new Size(1422, 800);
+   Controls.Add(comboBoxFilter);
+   Controls.Add(trackBarBilateral);
+   Controls.Add(lblTrackBarValue);
+   Controls.Add(btnFilter);
+   Controls.Add(btnChoose);
+   Controls.Add(btnReset);
+   Controls.Add(groupBox1);
+   Controls.Add(groupBox2);
+   Name = "Form1";
+   Text = "Image Filter Application";
+   Load += Form1_Load;
+   ((System.ComponentModel.ISupportInitialize)picBefore).EndInit();
+   ((System.ComponentModel.ISupportInitialize)picAfter).EndInit();
+   groupBox1.ResumeLayout(false);
+   groupBox2.ResumeLayout(false);
+   ((System.ComponentModel.ISupportInitialize)trackBarBilateral).EndInit();
+   ResumeLayout(false);
+   PerformLayout();
+  }
+  #endregion
+  private PictureBox picBefore;
+  private PictureBox picAfter;
+  private Button btnChoose;
+  private Button btnReset;
+  private GroupBox groupBox1;
+  private GroupBox groupBox2;
+  private ComboBox comboBoxFilter;
+  private TrackBar trackBarBilateral;
+  private Label lblTrackBarValue;
+  private Button btnFilter;
  }
 }
-
