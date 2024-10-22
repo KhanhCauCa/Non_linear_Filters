@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
-namespace Non_linear_Filters_Median
+namespace Non_linear_Filters
 {
  partial class Form1
  {

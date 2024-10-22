@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Non_linear_Filters_Median
+namespace Non_linear_Filters
 {
     internal static class Program
     {

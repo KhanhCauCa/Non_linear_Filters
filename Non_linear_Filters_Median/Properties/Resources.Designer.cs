@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Non_linear_Filters_Median.Properties
+namespace Non_linear_Filters.Properties
 {
 
 

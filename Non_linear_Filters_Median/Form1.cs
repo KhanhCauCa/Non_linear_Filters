@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 
-namespace Non_linear_Filters_Median
+namespace Non_linear_Filters
 {
     public partial class Form1 : Form
     {
@@ -168,9 +168,6 @@ namespace Non_linear_Filters_Median
             return resultMat;
         }
 
-
-
-        // Bộ lọc khuếch tán dị hướng (Anisotropic Diffusion)
 
 
         private void btnChoose_Click(object sender, EventArgs e)
