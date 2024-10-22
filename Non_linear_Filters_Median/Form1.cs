@@ -32,6 +32,7 @@ namespace Non_linear_Filters
             trackBarBilateral.Minimum = 1;
             trackBarBilateral.Maximum = 100;
             trackBarBilateral.Value = 50;
+            originalPicAfterSize = picAfter.Size;
 
             picAfter.MouseWheel += PicAfter_MouseWheel;
 
@@ -103,12 +104,12 @@ namespace Non_linear_Filters
                     Cv2.BilateralFilter(sourceMat, filteredMat, 15, sigmaColor, sigmaSpace);
                     break;
 
-             
+
                 case "Nonlinear Weighted Mean":
                     filteredMat = ApplyNonlinearWeightedMeanFilter(sourceMat);
                     break;
 
-               
+
 
                 case "None":
                     filteredMat = sourceMat.Clone();
@@ -191,6 +192,7 @@ namespace Non_linear_Filters
 
         //add 
         private float zoomFactorAfter = 1.0f;
+        private System.Drawing.Size originalPicAfterSize;
 
         private void PicAfter_MouseWheel(object sender, MouseEventArgs e)
         {
@@ -205,13 +207,16 @@ namespace Non_linear_Filters
             }
 
             // Áp dụng tỷ lệ phóng đại
-            picAfter.Width = (int)(465 * zoomFactorAfter); // Giữ kích thước tối đa
-            picAfter.Height = (int)(551 * zoomFactorAfter);
-            Bitmap sourceBitmap = new Bitmap(picAfter.Image);
+            picAfter.Width = (int)(originalPicAfterSize.Width * zoomFactorAfter);
+            picAfter.Height = (int)(originalPicAfterSize.Height * zoomFactorAfter);
 
-            // Cập nhật lại kích thước hình ảnh
-            picAfter.Image?.Dispose(); // Giải phóng hình ảnh trước đó
-            picAfter.Image = new Bitmap(sourceBitmap, picAfter.Size); // Tạo hình ảnh mới với kích thước đã thay đổi
+            // Kiểm tra xem có ảnh trong picAfter không trước khi tạo Bitmap
+            if (picAfter.Image != null)
+            {
+                Bitmap sourceBitmap = new Bitmap(picAfter.Image);
+                picAfter.Image?.Dispose();
+                picAfter.Image = new Bitmap(sourceBitmap, picAfter.Size);
+            }
         }
     }
 }

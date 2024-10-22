@@ -155,7 +155,6 @@ namespace Non_linear_Filters
    Name = "Form1";
    Text = "Image Filter Application";
    Load += Form1_Load;
-   ((System.ComponentModel.ISupportInitialize)picBefore).EndInit();
    ((System.ComponentModel.ISupportInitialize)picAfter).EndInit();
    groupBox1.ResumeLayout(false);
    groupBox2.ResumeLayout(false);
